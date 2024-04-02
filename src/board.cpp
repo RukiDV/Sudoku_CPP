@@ -1,5 +1,7 @@
 #include "board.hpp"
 #include <cassert>
+#include <sstream>
+#include <iostream>
 
 Board::Board(uint32_t size_x, uint32_t size_y) : size_x(size_x), size_y(size_y), content(size_x * size_y, 0)
 {}
@@ -59,5 +61,40 @@ uint32_t Board::get_size_x() const
 uint32_t Board::get_size_y() const
 {
     return size_y;
+}
+
+std::string Board::to_string(bool compact) const
+{
+    std::stringstream board_string;
+    std::string big_horizontal_separator = "=====================================\n";
+    std::string small_horizontal_separator = "-------------------------------------\n";
+    std::string big_vertical_separator = "║";
+    std::string small_vertical_separator = "|";
+    if (compact)
+    {
+        big_horizontal_separator = "-------------------------\n";
+        small_horizontal_separator = "";
+        big_vertical_separator = small_vertical_separator;
+        small_vertical_separator = "";
+    }
+    for (int i = 0; i < size_x; i++)
+    {
+        board_string << (i % 3 == 0 ? big_horizontal_separator : small_horizontal_separator);
+        board_string << big_vertical_separator << " ";
+        for (int j = 0; j < size_y; j++)
+        {
+            board_string << uint32_t(get_value(i,j));
+            if (j != size_y - 1)
+            {
+                std::string output = " ";
+                if (j % 3 == 2) output.append(big_vertical_separator + " ");
+                else if (!small_vertical_separator.empty()) output.append(small_vertical_separator + " ");
+                board_string << output;
+            }
+        }
+        board_string << " " << big_vertical_separator << "\n";
+    }
+    board_string << big_horizontal_separator << std::flush;
+    return board_string.str();
 }
 

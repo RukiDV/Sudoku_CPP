@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <cstdint>
+#include <string>
 
 enum ContentFlags
 {
@@ -20,6 +21,8 @@ public:
     uint32_t get_flags(uint32_t x, uint32_t y) const;
     uint32_t get_size_x() const;
     uint32_t get_size_y() const;
+
+    std::string to_string(bool compact = true) const;
 
 private:
     uint32_t size_x = 0;
