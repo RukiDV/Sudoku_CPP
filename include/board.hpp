@@ -2,6 +2,7 @@
 #include <vector>
 #include <cstdint>
 #include <string>
+#include <ostream>
 
 enum ContentFlags
 {
@@ -34,4 +35,6 @@ private:
     uint32_t& get_field_ref(uint32_t x, uint32_t y);
     uint32_t get_field_content(uint32_t x, uint32_t y) const;
 };
+
+std::ostream& operator<<(std::ostream& os, const Board& board);
 

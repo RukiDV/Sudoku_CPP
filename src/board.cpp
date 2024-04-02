@@ -98,3 +98,9 @@ std::string Board::to_string(bool compact) const
     return board_string.str();
 }
 
+std::ostream& operator<<(std::ostream& os, const Board& board)
+{
+    os << board.to_string();
+    return os;
+}
+
