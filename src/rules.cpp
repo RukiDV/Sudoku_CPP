@@ -11,6 +11,7 @@ bool check_row(const Board& board, uint32_t x)
     {
         if (!map.emplace(board.get_value(x, i)).second) return false;
     }
+    return true;
 }
 
 bool check_column(const Board& board, uint32_t x)
@@ -21,6 +22,7 @@ bool check_column(const Board& board, uint32_t x)
     {
         if (!map.emplace(board.get_value(i, x)).second) return false;
     }
+    return true;
 }
 
 bool check_square(const Board& board, uint32_t x, uint32_t y)
@@ -33,23 +35,26 @@ bool check_square(const Board& board, uint32_t x, uint32_t y)
             if (!map.emplace(board.get_value(i, j)).second) return false;
         }
     }
+    return true;
 }
 
-void check_basic_rules(const Board& board)
+bool check_basic_rules(const Board& board)
 {
+    bool valid = true;
     for (int i = 0; i < board.get_size_y(); i++)
     {
-        check_row(board, i);
+        valid &= check_row(board, i);
     }
     for (int i = 0; i < board.get_size_x(); i++)
     {
-        check_column(board, i);
+        valid &= check_column(board, i);
     }
     for (int i = 0; i < board.get_size_x() / 3; i++)
     {
         for (int j = 0; j < board.get_size_y() / 3; j++)
         {
-            check_square(board, i, j);
+            valid &= check_square(board, i, j);
         }
     }
+    return valid;
 }

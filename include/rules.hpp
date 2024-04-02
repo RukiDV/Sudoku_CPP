@@ -2,5 +2,5 @@
 
 class Board;
 
-void check_basic_rules(const Board& board);
+bool check_basic_rules(const Board& board);
 
