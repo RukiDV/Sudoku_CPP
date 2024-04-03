@@ -2,6 +2,7 @@
 #include <limits>
 
 #include "board.hpp"
+#include "board_factory.hpp"
 
 std::istream& get_user_input()
 {
@@ -25,6 +26,7 @@ int32_t get_user_integer(int32_t lower_bound = std::numeric_limits<int32_t>::min
 int main (int argc, char** argv)
 {
     Board board(9, 9);
+    build_sudoku_board(board, 50);
     while (true)
     {
         std::cout << board << std::endl;
