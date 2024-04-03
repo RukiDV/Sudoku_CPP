@@ -8,13 +8,13 @@ Board::Board(uint32_t size_x, uint32_t size_y) : size_x(size_x), size_y(size_y),
 
 uint32_t Board::get_field_content(uint32_t x, uint32_t y) const
 {
-    assert(x < size_x && y < size_y);
+    assert(x < size_x && y < size_y && x >= 0 && y >= 0);
     return content[size_x * y + x];
 }
 
 uint32_t& Board::get_field_ref(uint32_t x, uint32_t y)
 {
-    assert(x < size_x && y < size_y);
+    assert(x < size_x && y < size_y && x >= 0 && y >= 0);
     return content[size_x * y + x];
 }
 
@@ -33,7 +33,7 @@ void Board::set_value(uint32_t x, uint32_t y, uint8_t value)
 {
     assert(!(value & flag_mask));
     get_field_ref(x, y) &= flag_mask;
-    get_field_ref(x, y) |= value;
+    get_field_ref(x, y) |= uint32_t(value);
 }
 
 uint8_t Board::get_value(uint32_t x, uint32_t y) const
