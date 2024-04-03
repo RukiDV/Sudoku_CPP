@@ -38,7 +38,7 @@ bool check_square(const Board& board, uint32_t x, uint32_t y)
     return true;
 }
 
-bool check_basic_rules(const Board& board)
+bool check_basic_sudoku_rules(const Board& board)
 {
     bool valid = true;
     for (int i = 0; i < board.get_size_y(); i++)
