@@ -9,6 +9,7 @@ bool check_row(const Board& board, uint32_t x)
     // check if value is in map, if true return false
     for (int i = 0; i < board.get_size_x(); i++)
     {
+        if (board.get_value(x, i) == 0) continue;
         if (!map.emplace(board.get_value(x, i)).second) return false;
     }
     return true;
@@ -20,6 +21,7 @@ bool check_column(const Board& board, uint32_t x)
     // check if value is in map, if true return false
     for (int i = 0; i < board.get_size_y(); i++)
     {
+        if (board.get_value(i, x) == 0) continue;
         if (!map.emplace(board.get_value(i, x)).second) return false;
     }
     return true;
@@ -32,6 +34,7 @@ bool check_square(const Board& board, uint32_t x, uint32_t y)
     {
         for (int j = 3 * y; j < 3 * (y + 1); j++)
         {
+            if (board.get_value(i, j) == 0) continue;
             if (!map.emplace(board.get_value(i, j)).second) return false;
         }
     }
