@@ -4,7 +4,7 @@
 #include <iostream>
 #include <log.hpp>
 
-Board::Board(uint32_t size_x, uint32_t size_y) : size_x(size_x), size_y(size_y), content(size_x * size_y, 0)
+Board::Board(uint32_t size_x, uint32_t size_y) : size_x(size_x), size_y(size_y), content(size_x * size_y, CONTENT_FLAGS_INVALID)
 {}
 
 uint32_t Board::get_field_content(uint32_t x, uint32_t y) const
@@ -84,8 +84,11 @@ std::string Board::to_string(bool compact) const
         board_string << big_vertical_separator << " ";
         for (int j = 0; j < size_y; j++)
         {
-            if (get_flags(i, j) & CONTENT_FLAGS_PRESET) board_string << get_colored(uint32_t(get_value(i, j)), Color::White);
-            else board_string << get_colored(uint32_t(get_value(i, j)), Color::LightBlue);
+            uint32_t flags = get_flags(i, j);
+            if (flags & CONTENT_FLAGS_INVALID) board_string << " ";
+            else if (flags & CONTENT_FLAGS_PRE_SET) board_string << get_colored(uint32_t(get_value(i, j)), Color::White);
+            else if (flags & CONTENT_FLAGS_USER_SET) board_string << get_colored(uint32_t(get_value(i, j)), Color::LightBlue);
+            else ERROR("Failed to determine set flags.");
             if (j != size_y - 1)
             {
                 std::string output = " ";

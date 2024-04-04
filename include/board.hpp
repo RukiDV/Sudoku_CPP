@@ -7,7 +7,9 @@
 enum ContentFlags
 {
     CONTENT_FLAGS_NONE = 0,
-    CONTENT_FLAGS_PRESET = (1u << 31)
+    CONTENT_FLAGS_INVALID = (1u << 29),
+    CONTENT_FLAGS_USER_SET = (1u << 30),
+    CONTENT_FLAGS_PRE_SET = (1u << 31)
 };
 
 class Board

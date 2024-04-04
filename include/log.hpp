@@ -1,6 +1,8 @@
-#include <string_view>
+#pragma once
+
 #include <sstream>
 #include <iostream>
+#include <format>
 
 enum class Color
 {
@@ -48,4 +50,12 @@ std::string get_colored(const T& value, const Color color)
     colored_value << value << "\033[0m";
     return colored_value.str();
 }
+
+#define ERROR(...)                                              \
+{                                                               \
+    std::string s = std::format("{}:{}", __FILE__, __LINE__);   \
+    std::cerr << get_colored("ERROR: ", Color::Red);            \
+    std::cerr << s << "\n" << __VA_ARGS__ << std::endl;         \
+    throw std::runtime_error(s);                                \
+}                                                               \
 

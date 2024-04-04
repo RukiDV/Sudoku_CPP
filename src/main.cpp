@@ -4,6 +4,8 @@
 #include "board.hpp"
 #include "random_generator.hpp"
 #include "board_factory.hpp"
+#include "log.hpp"
+#include "rules.hpp"
 
 std::istream& get_user_input()
 {
@@ -26,13 +28,11 @@ int32_t get_user_integer(int32_t lower_bound = std::numeric_limits<int32_t>::min
 
 int main (int argc, char** argv)
 {
-    std::cout << rnd::random_int(1, 10) << std::endl;
-    std::cout << rnd::random_int(1, 10) << std::endl;
-
     Board board(9, 9);
     build_sudoku_board(board, 50);
-    
-    while (true)
+
+    bool quit = false;
+    while (!quit)
     {
         std::cout << board << std::endl;
         // Input x-coordinate
@@ -44,15 +44,29 @@ int main (int argc, char** argv)
         // Input value
         std::cout << "Enter your value (0 to delete): ";
         int32_t user_input_value = get_user_integer(0, 9);
-        if (!(board.get_flags(user_input_x, user_input_y) & CONTENT_FLAGS_PRESET))
+
+        if (!(board.get_flags(user_input_x, user_input_y) & CONTENT_FLAGS_PRE_SET))
         {
-            board.set_field(user_input_x, user_input_y, user_input_value, CONTENT_FLAGS_NONE);
-        } else 
+            if (user_input_value == 0) board.set_flags(user_input_x, user_input_y, CONTENT_FLAGS_INVALID);
+            else board.set_field(user_input_x, user_input_y, user_input_value, CONTENT_FLAGS_USER_SET);
+        } else
         {
             std::cout << "You can not overwrite given field values!\n";
         }
+        bool done = true;
+        for (uint32_t i = 0; i < board.get_size_x(); ++i)
+        {
+            for (uint32_t j = 0; j < board.get_size_y(); ++j)
+            {
+                done &= !(board.get_flags(i, j) & CONTENT_FLAGS_INVALID);
+            }
+        }
+        done &= check_basic_sudoku_rules(board);
+        quit |= done;
     }
     std::cout << board << std::endl;
+    std::cout << "Congratulations, your sudoku is correct!\n";
+
     return 0;
 }
 
