@@ -15,9 +15,9 @@ void build_sudoku_board(Board& board, uint32_t value_count)
         int32_t y = rnd::random_int(0, 9);
         if (board.get_value(x, y) != 0) continue;
         int32_t value = rnd::random_int(1, 10);
-        board.set_value(x, y, value);
+        board.set_field(x, y, value, CONTENT_FLAGS_PRESET);
         if (check_basic_sudoku_rules(board)) i++;
-        else board.set_value(x, y, 0);
+        else board.set_field(x, y, 0, CONTENT_FLAGS_NONE);
     }
 }
 
