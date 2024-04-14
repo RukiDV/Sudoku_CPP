@@ -16,7 +16,7 @@ void build_sudoku_board(Board& board, uint32_t value_count)
         if (!(board.get_flags(x, y) & CONTENT_FLAGS_INVALID)) continue;
         int32_t value = rnd::random_int(1, 10);
         board.set_field(x, y, value, CONTENT_FLAGS_PRE_SET);
-        if (check_basic_sudoku_rules(board)) i++;
+        if (rules::check_rules(board)) i++;
         else board.set_field(x, y, 0, CONTENT_FLAGS_INVALID);
     }
 }

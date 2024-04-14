@@ -41,7 +41,9 @@ bool check_square(const Board& board, uint32_t x, uint32_t y)
     return true;
 }
 
-bool check_basic_sudoku_rules(const Board& board)
+namespace basic_sudoku
+{
+bool check_rules(const Board& board)
 {
     bool valid = true;
     for (int i = 0; i < board.get_size_y(); i++)
@@ -61,4 +63,25 @@ bool check_basic_sudoku_rules(const Board& board)
     }
     return valid;
 }
+
+bool is_dependent(uint32_t x0, uint32_t y0, uint32_t x1, uint32_t y1)
+{
+    if (x0 == x1 || y0 == y1) return true;
+    else if (x0 / 3 == x1 / 3 && y0 / 3 == y1 / 3) return true;
+    else return false;
+}
+
+bool is_finished(const Board& board)
+{
+    bool finished = check_rules(board);
+    for (int i = 0; i < board.get_size_x(); i++)
+    {
+        for (int j = 0; j < board.get_size_y(); j++)
+        {
+            finished &= !(board.get_flags(i, j) & CONTENT_FLAGS_INVALID);
+        }
+    }
+    return finished;
+}
+} // namespace basic_sudoku
 

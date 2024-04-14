@@ -29,7 +29,7 @@ int32_t get_user_integer(int32_t lower_bound = std::numeric_limits<int32_t>::min
 int main (int argc, char** argv)
 {
     Board board(9, 9);
-    build_sudoku_board(board, 50);
+    board.set_field(2, 1, 5, CONTENT_FLAGS_USER_SET);
 
     bool quit = false;
     while (!quit)
@@ -44,7 +44,6 @@ int main (int argc, char** argv)
         // Input value
         std::cout << "Enter your value (0 to delete): ";
         int32_t user_input_value = get_user_integer(0, 9);
-
         if (!(board.get_flags(user_input_x, user_input_y) & CONTENT_FLAGS_PRE_SET))
         {
             if (user_input_value == 0) board.set_flags(user_input_x, user_input_y, CONTENT_FLAGS_INVALID);
@@ -61,10 +60,9 @@ int main (int argc, char** argv)
                 done &= !(board.get_flags(i, j) & CONTENT_FLAGS_INVALID);
             }
         }
-        done &= check_basic_sudoku_rules(board);
+        done &= rules::check_rules(board);
         quit |= done;
     }
-    std::cout << board << std::endl;
     std::cout << "Congratulations, your sudoku is correct!\n";
 
     return 0;

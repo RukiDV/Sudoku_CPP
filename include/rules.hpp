@@ -1,6 +1,14 @@
 #pragma once
+#include <cstdint>
 
 class Board;
 
-bool check_basic_sudoku_rules(const Board& board);
+namespace basic_sudoku
+{
+bool check_rules(const Board& board);
+bool is_finished(const Board& board);
+bool is_dependent(uint32_t x0, uint32_t y0, uint32_t x1, uint32_t y1);
+} // namespace basic_sudoku
+
+namespace rules = basic_sudoku;
 
