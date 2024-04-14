@@ -6,6 +6,7 @@
 #include "board_factory.hpp"
 #include "log.hpp"
 #include "rules.hpp"
+#include "bot.hpp"
 
 std::istream& get_user_input()
 {
@@ -30,6 +31,8 @@ int main (int argc, char** argv)
 {
     Board board(9, 9);
     board.set_field(2, 1, 5, CONTENT_FLAGS_USER_SET);
+
+    Bot bot(board);
 
     bool quit = false;
     while (!quit)
