@@ -49,6 +49,12 @@ void Board::set_flags(uint32_t x, uint32_t y, ContentFlags flags)
     get_field_ref(x, y) |= flags;
 }
 
+void Board::add_flag(uint32_t x, uint32_t y, ContentFlags flag)
+{
+    assert(!(flag & value_mask));
+    get_field_ref(x, y) |= flag;
+}
+
 uint32_t Board::get_flags(uint32_t x, uint32_t y) const
 {
     return get_field_content(x, y) & flag_mask;
@@ -78,18 +84,19 @@ std::string Board::to_string(bool compact) const
         big_vertical_separator = small_vertical_separator;
         small_vertical_separator = "";
     }
-    for (int i = 0; i < size_x; i++)
+    for (int i = 0; i < size_y; i++)
     {
         board_string << (i % 3 == 0 ? big_horizontal_separator : small_horizontal_separator);
         board_string << big_vertical_separator << " ";
-        for (int j = 0; j < size_y; j++)
+        for (int j = 0; j < size_x; j++)
         {
-            uint32_t flags = get_flags(i, j);
+            uint32_t flags = get_flags(j, i);
             if (flags & CONTENT_FLAGS_INVALID) board_string << " ";
-            else if (flags & CONTENT_FLAGS_PRE_SET) board_string << get_colored(uint32_t(get_value(i, j)), Color::White);
-            else if (flags & CONTENT_FLAGS_USER_SET) board_string << get_colored(uint32_t(get_value(i, j)), Color::LightBlue);
+            else if (flags & CONTENT_FLAGS_PRE_SET) board_string << get_colored(uint32_t(get_value(j, i)), Color::White);
+            else if (flags & CONTENT_FLAGS_USER_SET) board_string << get_colored(uint32_t(get_value(j, i)), Color::LightBlue);
+            else if (flags & CONTENT_FLAGS_BOT_SET) board_string << get_colored(uint32_t(get_value(j, i)), Color::Pink);
             else ERROR("Failed to determine set flags.");
-            if (j != size_y - 1)
+            if (j != size_x - 1)
             {
                 std::string output = " ";
                 if (j % 3 == 2) output.append(big_vertical_separator + " ");
