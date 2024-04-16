@@ -2,11 +2,9 @@
 #include <limits>
 
 #include "board.hpp"
-#include "random_generator.hpp"
 #include "board_factory.hpp"
 #include "log.hpp"
 #include "rules.hpp"
-#include "bot.hpp"
 
 std::istream& get_user_input()
 {
@@ -29,10 +27,7 @@ int32_t get_user_integer(int32_t lower_bound = std::numeric_limits<int32_t>::min
 
 int main (int argc, char** argv)
 {
-    Board board(9, 9);
-    board.set_field(2, 1, 5, CONTENT_FLAGS_USER_SET);
-
-    Bot bot(board);
+    Board board = build_sudoku_board(40);
 
     bool quit = false;
     while (!quit)

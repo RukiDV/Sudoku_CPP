@@ -1,6 +1,4 @@
 #pragma once
-#include <vector>
-#include <unordered_map>
 #include <cstdint>
 #include "board.hpp"
 
@@ -18,6 +16,7 @@ public:
     bool is_solvable() const;
     Board get_solution() const;
     Bot::Step step(const Board& board) const;
+    static bool solve(Board& board);
 private:
     Board solved_board;
 };

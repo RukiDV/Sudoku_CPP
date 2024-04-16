@@ -1,7 +1,8 @@
 #include "bot.hpp"
 
 #include <limits>
-#include <iostream>
+#include <vector>
+#include <unordered_map>
 
 #include "rules.hpp"
 
@@ -82,15 +83,19 @@ bool solve(Board& board, std::unordered_map<uint64_t, std::vector<int32_t>>& buc
                 }
             }
         }
-        std::cout << board << std::endl;
     }
     return rules::is_finished(board);
 }
 
-Bot::Bot(const Board& board) : solved_board(board)
+bool Bot::solve(Board& board)
 {
     std::unordered_map<uint64_t, std::vector<int32_t>> buckets;
-    solve(solved_board, buckets);
+    return ::solve(board, buckets);
+}
+
+Bot::Bot(const Board& board) : solved_board(board)
+{
+    solve(solved_board);
 }
 
 Bot::Step Bot::step(const Board& board) const
