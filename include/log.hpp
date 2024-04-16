@@ -13,7 +13,6 @@ enum class Color
     Pink,
     LightBlue,
     White
-    
 };
 
 template<class T>

@@ -40,15 +40,15 @@ int main (int argc, char** argv)
         std::cout << "Enter your y-coordinate\n";
         int32_t user_input_y = get_user_integer(1, 9) - 1;
         // Input value
-        std::cout << "Enter your value (0 to delete): ";
+        std::cout << "Enter your value (0 to delete)\n";
         int32_t user_input_value = get_user_integer(0, 9);
-        if (!(board.get_flags(user_input_x, user_input_y) & CONTENT_FLAGS_PRE_SET))
+        if (!(board.get_flags(user_input_x, user_input_y) & CONTENT_FLAGS_PRE_SET) && !(board.get_flags(user_input_x, user_input_y) & CONTENT_FLAGS_BOT_SET))
         {
             if (user_input_value == 0) board.set_flags(user_input_x, user_input_y, CONTENT_FLAGS_INVALID);
             else board.set_field(user_input_x, user_input_y, user_input_value, CONTENT_FLAGS_USER_SET);
         } else
         {
-            std::cout << "You can not overwrite given field values!\n";
+            std::cout << get_colored("You can not overwrite given field values!\n", Color::Red);
         }
         bool done = true;
         for (uint32_t i = 0; i < board.get_size_x(); ++i)
@@ -61,7 +61,7 @@ int main (int argc, char** argv)
         done &= rules::check_rules(board);
         quit |= done;
     }
-    std::cout << "Congratulations, your sudoku is correct!\n";
+    std::cout << get_colored("Congratulations, your sudoku is correct!\n", Color::Pink);
 
     return 0;
 }
