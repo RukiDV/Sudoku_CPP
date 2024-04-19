@@ -5,6 +5,7 @@
 #include "board_factory.hpp"
 #include "log.hpp"
 #include "rules.hpp"
+#include "bot.hpp"
 
 std::istream& get_user_input()
 {
@@ -27,7 +28,8 @@ int32_t get_user_integer(int32_t lower_bound = std::numeric_limits<int32_t>::min
 
 int main (int argc, char** argv)
 {
-    Board board = build_sudoku_board(40);
+    Board board = build_sudoku_board(10);
+    Bot bot(board);
 
     bool quit = false;
     while (!quit)
@@ -45,21 +47,13 @@ int main (int argc, char** argv)
         if (!(board.get_flags(user_input_x, user_input_y) & CONTENT_FLAGS_PRE_SET) && !(board.get_flags(user_input_x, user_input_y) & CONTENT_FLAGS_BOT_SET))
         {
             if (user_input_value == 0) board.set_flags(user_input_x, user_input_y, CONTENT_FLAGS_INVALID);
-            else board.set_field(user_input_x, user_input_y, user_input_value, CONTENT_FLAGS_USER_SET);
-        } else
-        {
-            std::cout << get_colored("You can not overwrite given field values!\n", Color::Red);
-        }
-        bool done = true;
-        for (uint32_t i = 0; i < board.get_size_x(); ++i)
-        {
-            for (uint32_t j = 0; j < board.get_size_y(); ++j)
+            else 
             {
-                done &= !(board.get_flags(i, j) & CONTENT_FLAGS_INVALID);
+                board.set_field(user_input_x, user_input_y, user_input_value, CONTENT_FLAGS_USER_SET);
+                if (user_input_value != bot.get_solution(user_input_x, user_input_y)) board.add_flag(user_input_x, user_input_y, CONTENT_FLAGS_WRONG);    
             }
-        }
-        done &= rules::check_rules(board);
-        quit |= done;
+        } else std::cout << get_colored("You can not overwrite given field values!\n", Color::Red);
+        quit |= rules::is_finished(board);
     }
     std::cout << get_colored("Congratulations, your sudoku is correct!\n", Color::Pink);
 

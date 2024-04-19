@@ -92,6 +92,7 @@ std::string Board::to_string(bool compact) const
         {
             uint32_t flags = get_flags(j, i);
             if (flags & CONTENT_FLAGS_INVALID) board_string << " ";
+            else if (flags & CONTENT_FLAGS_WRONG) board_string << get_colored(uint32_t(get_value(j, i)), Color::Red);
             else if (flags & CONTENT_FLAGS_PRE_SET) board_string << get_colored(uint32_t(get_value(j, i)), Color::White);
             else if (flags & CONTENT_FLAGS_USER_SET) board_string << get_colored(uint32_t(get_value(j, i)), Color::LightBlue);
             else if (flags & CONTENT_FLAGS_BOT_SET) board_string << get_colored(uint32_t(get_value(j, i)), Color::Pink);

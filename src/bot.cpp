@@ -118,6 +118,11 @@ bool Bot::is_solvable() const
     return rules::is_finished(solved_board);
 }
 
+uint32_t Bot::get_solution(uint32_t x, uint32_t y) const
+{
+    return get_solution().get_value(x, y);
+}
+
 Board Bot::get_solution() const
 {
     return solved_board;
