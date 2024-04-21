@@ -3,6 +3,7 @@
 #include <limits>
 #include <vector>
 #include <unordered_map>
+#include <cassert>
 
 #include "rules.hpp"
 
@@ -37,13 +38,37 @@ void init(Board& board, std::unordered_map<uint64_t, std::vector<int32_t>>& buck
     }
 }
 
+void update_buckets(uint32_t x, uint32_t y, int32_t value, std::unordered_map<uint64_t, std::vector<int32_t>>& buckets)
+{
+    for (auto& [key, b] : buckets)
+    {
+        auto [x1, y1] = get_indices(key);
+        if (rules::is_dependent(x, y, x1, y1))
+        {
+            for (auto it = b.begin(); it != b.end(); it++)
+            {
+                if (*it == value)
+                {
+                    b.erase(it);
+                    break;
+                }
+            }
+        }
+    }
+}
+
 bool solve(Board& board, std::unordered_map<uint64_t, std::vector<int32_t>>& buckets, bool test_uniquely_solvable = false)
 {
     bool done = false;
     while (!done)
     {
-        init(board, buckets);
-        if (buckets.empty()) return rules::is_finished(board); // no empty fields, should return true TODO
+        if (buckets.empty())
+        {
+            // no empty fields, board has to be valid as we should never have created an invalid board
+            // assert that every field contains value and board is valid
+            assert(rules::is_finished(board));
+            return true;
+        }
         uint64_t min_key = 0;
         uint32_t min = std::numeric_limits<uint32_t>::max();
         for (const auto& [key, b] : buckets)
@@ -54,12 +79,19 @@ bool solve(Board& board, std::unordered_map<uint64_t, std::vector<int32_t>>& buc
                 min_key = key;
             }
         }
+        auto [x, y] = get_indices(min_key);
 
-        if (min == 0) return rules::is_finished(board); // empty field with no possible value, should return false because unsolvable TODO
+        if (min == 0)
+        {
+            // empty field with no possible value, returns false because unsolvable
+            assert(!rules::is_finished(board));
+            return false;
+        }
         else if (min == 1) // field with only one possible value
         {
-            auto [x, y] = get_indices(min_key);
             board.set_field(x, y, buckets.at(min_key)[0], CONTENT_FLAGS_BOT_SET);
+            update_buckets(x, y, buckets.at(min_key)[0], buckets);
+            buckets.erase(min_key);
         }
         else // multiple choices possible, guess one element, try if it works out
         {
@@ -67,29 +99,33 @@ bool solve(Board& board, std::unordered_map<uint64_t, std::vector<int32_t>>& buc
             {
                 int32_t value = buckets.at(min_key).back();
                 buckets.at(min_key).pop_back();
-                auto [x, y] = get_indices(min_key);
                 Board board_copy(board);
-                std::unordered_map<uint64_t, std::vector<int32_t>> buckets_copy;
+                std::unordered_map<uint64_t, std::vector<int32_t>> buckets_copy = buckets;
                 board_copy.set_field(x, y, value, CONTENT_FLAGS_BOT_SET);
+                update_buckets(x, y, value, buckets_copy);
+                buckets_copy.erase(min_key);
                 if (solve(board_copy, buckets_copy))
                 {
                     if (!test_uniquely_solvable)
                     {
                         board = board_copy;
+                        buckets.erase(min_key);
                         return true;
                     }
                     board.set_field(x, y, value, CONTENT_FLAGS_BOT_SET);
-                
+                    update_buckets(x, y, value, buckets);
                 }
             }
         }
     }
-    return rules::is_finished(board);
+    assert(false);
+    return false;
 }
 
 bool Bot::solve(Board& board)
 {
     std::unordered_map<uint64_t, std::vector<int32_t>> buckets;
+    init(board, buckets);
     return ::solve(board, buckets);
 }
 
