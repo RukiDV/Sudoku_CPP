@@ -1,62 +1,98 @@
 #include <iostream>
 #include <limits>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
+#include <glm/vec3.hpp>
 
 #include "board.hpp"
 #include "board_factory.hpp"
 #include "log.hpp"
 #include "rules.hpp"
 #include "bot.hpp"
+#include "window_basic_sudoku.hpp"
 
-std::istream& get_user_input()
+void apply_user_input(Board& board, uint32_t user_input_x, uint32_t user_input_y, uint32_t user_input_value, const Bot& bot)
 {
-    std::cout << "> ";
-    return std::cin;
-}
-
-int32_t get_user_integer(int32_t lower_bound = std::numeric_limits<int32_t>::min(), int32_t upper_bound = std::numeric_limits<int32_t>::max())
-{
-    std::cout << "Possible range: [" << lower_bound << ", " << upper_bound << "]" << std::endl;
-    int32_t input;
-    get_user_input() >> input;
-    while (input > upper_bound || input < lower_bound)
+    if (!(board.get_flags(user_input_x, user_input_y) & CONTENT_FLAGS_PRE_SET) && !(board.get_flags(user_input_x, user_input_y) & CONTENT_FLAGS_BOT_SET))
     {
-        std::cout << "Outside of permitted range! Try again." << std::endl;
-        get_user_input() >> input;
-    }
-    return input;
+        if (user_input_value == 0) board.set_flags(user_input_x, user_input_y, CONTENT_FLAGS_INVALID);
+        else
+        {
+            board.set_field(user_input_x, user_input_y, user_input_value, CONTENT_FLAGS_USER_SET);
+            if (user_input_value != bot.get_solution(user_input_x, user_input_y)) board.add_flag(user_input_x, user_input_y, CONTENT_FLAGS_WRONG);
+        }
+    } else std::cout << get_colored("You can not overwrite given field values!\n", Color::Red);
 }
 
 int main (int argc, char** argv)
 {
-    Board board = build_sudoku_board(10);
-    Bot bot(board);
+    Window window(WINDOW_SIZE.x, WINDOW_SIZE.y, "Sudoku Game");
 
+    Board board = build_sudoku_board(10);
+    std::cout << board << std::endl;
+    Bot bot(board);
+    std::cout << board << std::endl;
+
+    SDL_Event event;
+    glm::ivec2 selected_cell(-1, -1);
     bool quit = false;
     while (!quit)
     {
-        std::cout << board << std::endl;
-        // Input x-coordinate
-        std::cout << "Enter your x-coordinate\n";
-        int32_t user_input_x = get_user_integer(1, 9) - 1;
-        // Input y-coordinate
-        std::cout << "Enter your y-coordinate\n";
-        int32_t user_input_y = get_user_integer(1, 9) - 1;
-        // Input value
-        std::cout << "Enter your value (0 to delete)\n";
-        int32_t user_input_value = get_user_integer(0, 9);
-        if (!(board.get_flags(user_input_x, user_input_y) & CONTENT_FLAGS_PRE_SET) && !(board.get_flags(user_input_x, user_input_y) & CONTENT_FLAGS_BOT_SET))
+        while (window.pollEvents(event))
         {
-            if (user_input_value == 0) board.set_flags(user_input_x, user_input_y, CONTENT_FLAGS_INVALID);
-            else 
+            if (event.type == SDL_QUIT)
             {
-                board.set_field(user_input_x, user_input_y, user_input_value, CONTENT_FLAGS_USER_SET);
-                if (user_input_value != bot.get_solution(user_input_x, user_input_y)) board.add_flag(user_input_x, user_input_y, CONTENT_FLAGS_WRONG);    
+                quit = true;
             }
-        } else std::cout << get_colored("You can not overwrite given field values!\n", Color::Red);
-        quit |= rules::is_finished(board);
+            else if (event.type == SDL_WINDOWEVENT)
+            {
+                if (event.window.event == SDL_WINDOWEVENT_CLOSE)
+                {
+                    quit = true;
+                }
+            }
+            else if (event.type == SDL_MOUSEBUTTONDOWN)
+            {
+                int x, y;
+                SDL_GetMouseState(&x, &y);
+                selected_cell = glm::ivec2(x / CELL_SIZE.x, y / CELL_SIZE.y);
+            }
+            else if (event.type == SDL_KEYDOWN)
+            {
+                switch (event.key.keysym.sym)
+                {
+                case SDLK_1:
+                    apply_user_input(board, )
+                    break;
+                case SDLK_2:
+                    break;
+                case SDLK_3:
+                    break;
+                case SDLK_4:
+                    break;
+                case SDLK_5:
+                    break;
+                case SDLK_6:
+                    break;
+                case SDLK_7:
+                    break;
+                case SDLK_8:
+                    break;
+                case SDLK_9:
+                    break;    
+                default:
+                    std::cout << "Some other key pressed." << std::endl;
+                    break;
+                }
+            }
+        }
+
+        window.clear();
+        window.draw_board(board, selected_cell);
+        glEnd();
+        window.swapBuffers();
     }
     std::cout << get_colored("Congratulations, your sudoku is correct!\n", Color::Pink);
-
     return 0;
 }
 
