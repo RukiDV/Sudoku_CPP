@@ -49,6 +49,17 @@ void draw_cell_border(glm::vec2 pos, float size, const glm::vec3& color)
     glEnd();
 }
 
+void draw_quad(glm::vec2 pos, float size, const glm::vec3& color)
+{
+    glBegin(GL_TRIANGLE_STRIP);
+    glColor3f(color.r, color.g, color.b);
+    glVertex2f(pos.x - size / 2.0, pos.y + size / 2.0);
+    glVertex2f(pos.x - size / 2.0, pos.y - size / 2.0);
+    glVertex2f(pos.x + size / 2.0, pos.y + size / 2.0);
+    glVertex2f(pos.x + size / 2.0, pos.y - size / 2.0);
+    glEnd();
+}
+
 glm::vec2 get_frame_cell_pos(glm::ivec2 cell_pos)
 {
     return glm::vec2(-1.0 + CELL_OPENGL_SIZE.x / 2.0 + cell_pos.x * CELL_OPENGL_SIZE.x, 1.0 - CELL_OPENGL_SIZE.y / 2.0 - cell_pos.y * CELL_OPENGL_SIZE.y);
@@ -98,10 +109,12 @@ void Window::draw_board(const Board& board, const glm::ivec2 selected_cell)
             // mark background of empty cells and determine color of cell number
             uint32_t flags = board.get_flags(i, j);
             glm::vec3 color;
-            if (flags & CONTENT_FLAGS_WRONG) color = glm::vec3(1.0, 0.0, 0.0);
+            if (flags & CONTENT_FLAGS_INVALID) draw_quad(pos, CELL_OPENGL_SIZE.y - 0.01, glm::vec3(0.0, 0.0, 0.2));
+            else if (flags & CONTENT_FLAGS_WRONG) color = glm::vec3(1.0, 0.0, 0.0);
             else if (flags & CONTENT_FLAGS_PRE_SET) color = glm::vec3(1.0, 1.0, 1.0);
             else if (flags & CONTENT_FLAGS_USER_SET) color = glm::vec3(0.0, 1.0, 1.0);
             else if (flags & CONTENT_FLAGS_BOT_SET) color = glm::vec3(1.0, 0.0, 1.0);
+            else ERROR("Failed to determine set flags.");
 
             // draw grid cell
             if (i == selected_cell.x && j == selected_cell.y) draw_cell_border(pos, CELL_OPENGL_SIZE.y - 0.01, glm::vec3(0.0, 1.0, 1.0));
