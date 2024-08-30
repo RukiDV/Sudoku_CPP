@@ -57,30 +57,45 @@ int main (int argc, char** argv)
             }
             else if (event.type == SDL_KEYDOWN)
             {
+                int x, y;
+                SDL_GetMouseState(&x, &y);
                 switch (event.key.keysym.sym)
                 {
-                case SDLK_1:
-                    apply_user_input(board, )
-                    break;
-                case SDLK_2:
-                    break;
-                case SDLK_3:
-                    break;
-                case SDLK_4:
-                    break;
-                case SDLK_5:
-                    break;
-                case SDLK_6:
-                    break;
-                case SDLK_7:
-                    break;
-                case SDLK_8:
-                    break;
-                case SDLK_9:
-                    break;    
-                default:
-                    std::cout << "Some other key pressed." << std::endl;
-                    break;
+                    case SDLK_1:
+                        apply_user_input(board, selected_cell, 1, bot);
+                        break;
+                    case SDLK_2:
+                        apply_user_input(board, selected_cell, 2, bot);
+                        break;
+                    case SDLK_3:
+                        apply_user_input(board, selected_cell, 3, bot);
+                        break;
+                    case SDLK_4:
+                        apply_user_input(board, selected_cell, 4, bot);
+                        break;
+                    case SDLK_5:
+                        apply_user_input(board, selected_cell, 5, bot);
+                        break;
+                    case SDLK_6:
+                        apply_user_input(board, selected_cell, 6, bot);
+                        break;
+                    case SDLK_7:
+                        apply_user_input(board, selected_cell, 7, bot);
+                        break;
+                    case SDLK_8:
+                        apply_user_input(board, selected_cell, 8, bot);
+                        break;
+                    case SDLK_9:
+                        apply_user_input(board, selected_cell, 9, bot);
+                        break;    
+                    default:
+                        std::cout << "Some other key pressed." << std::endl;
+                        break;
+                }
+                if (rules::is_finished(board))
+                {
+                    quit = true;
+                    std::cout << get_colored("Congratulations, your sudoku is correct!\n", Color::Pink);
                 }
             }
         }
@@ -90,7 +105,6 @@ int main (int argc, char** argv)
         glEnd();
         window.swapBuffers();
     }
-    std::cout << get_colored("Congratulations, your sudoku is correct!\n", Color::Pink);
     return 0;
 }
 
