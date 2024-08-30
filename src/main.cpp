@@ -11,15 +11,15 @@
 #include "bot.hpp"
 #include "window_basic_sudoku.hpp"
 
-void apply_user_input(Board& board, uint32_t user_input_x, uint32_t user_input_y, uint32_t user_input_value, const Bot& bot)
+void apply_user_input(Board& board, glm::uvec2(user_input), uint32_t user_input_value, const Bot& bot)
 {
-    if (!(board.get_flags(user_input_x, user_input_y) & CONTENT_FLAGS_PRE_SET) && !(board.get_flags(user_input_x, user_input_y) & CONTENT_FLAGS_BOT_SET))
+    if (!(board.get_flags(user_input.x, user_input.y) & CONTENT_FLAGS_PRE_SET) && !(board.get_flags(user_input.x, user_input.y) & CONTENT_FLAGS_BOT_SET))
     {
-        if (user_input_value == 0) board.set_flags(user_input_x, user_input_y, CONTENT_FLAGS_INVALID);
+        if (user_input_value == 0) board.set_flags(user_input.x, user_input.y, CONTENT_FLAGS_INVALID);
         else
         {
-            board.set_field(user_input_x, user_input_y, user_input_value, CONTENT_FLAGS_USER_SET);
-            if (user_input_value != bot.get_solution(user_input_x, user_input_y)) board.add_flag(user_input_x, user_input_y, CONTENT_FLAGS_WRONG);
+            board.set_field(user_input.x, user_input.y, user_input_value, CONTENT_FLAGS_USER_SET);
+            if (user_input_value != bot.get_solution(user_input.x, user_input.y)) board.add_flag(user_input.x, user_input.y, CONTENT_FLAGS_WRONG);
         }
     } else std::cout << get_colored("You can not overwrite given field values!\n", Color::Red);
 }
@@ -29,9 +29,7 @@ int main (int argc, char** argv)
     Window window(WINDOW_SIZE.x, WINDOW_SIZE.y, "Sudoku Game");
 
     Board board = build_sudoku_board(10);
-    std::cout << board << std::endl;
     Bot bot(board);
-    std::cout << board << std::endl;
 
     SDL_Event event;
     glm::ivec2 selected_cell(-1, -1);

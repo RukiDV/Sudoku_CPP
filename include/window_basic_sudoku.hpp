@@ -27,8 +27,4 @@ private:
     SDL_GLContext context;
     int width; 
     int height;
-
-    void draw_grid(glm::ivec2 marked_cell = glm::ivec2(-1, -1));
-    void draw_cell(float pos_x, float pos_y, float size, const glm::vec3& color = glm::vec3(1.0, 0.0, 1.0));
-    void draw_dice_number(glm::ivec2 pos, uint32_t number, float extent, const glm::vec3& color = glm::vec3(1.0, 1.0, 1.0));
 };
