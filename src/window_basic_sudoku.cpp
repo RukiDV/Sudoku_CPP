@@ -36,6 +36,39 @@ void Window::clear() {
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
+void draw_9x9_grid(uint32_t marked_line_interval, const glm::vec3& marked_color)
+{
+    glLineWidth(10.0);
+    glBegin(GL_LINES);
+    glColor3f(1.0f, 1.0f, 1.0f);
+    // draw non-marked lines first
+    for(uint32_t i = 0; i < GRID_SIZE; ++i)
+    {
+        if (i % marked_line_interval == 0) continue;
+        glVertex2f(-1.0, -1.0 + i * CELL_OPENGL_SIZE.y);
+        glVertex2f(1.0, -1.0 + i * CELL_OPENGL_SIZE.y);
+    }
+    for(uint32_t i = 0; i < GRID_SIZE; ++i)
+    {
+        if (i % marked_line_interval == 0) continue;
+        glVertex2f(-1.0 + i * CELL_OPENGL_SIZE.x, -1.0);
+        glVertex2f(-1.0 + i * CELL_OPENGL_SIZE.x, 1.0);
+    }
+    // draw marked lines afterwards such that they overlap the non-marked lines
+    glColor3f(marked_color.r, marked_color.g, marked_color.b);
+    for(uint32_t i = 0; i <= GRID_SIZE; i += marked_line_interval)
+    {
+        glVertex2f(-1.0, -1.0 + i * CELL_OPENGL_SIZE.y);
+        glVertex2f(1.0, -1.0 + i * CELL_OPENGL_SIZE.y);
+    }
+    for(uint32_t i = 0; i <= GRID_SIZE; i += marked_line_interval)
+    {
+        glVertex2f(-1.0 + i * CELL_OPENGL_SIZE.x, -1.0);
+        glVertex2f(-1.0 + i * CELL_OPENGL_SIZE.x, 1.0);
+    }
+    glEnd();
+}
+
 void draw_cell_border(glm::vec2 pos, float size, const glm::vec3& color)
 {
     glLineWidth(5.0);
@@ -100,6 +133,7 @@ void draw_dice_number(glm::vec2 pos, uint32_t number, float extent, const glm::v
 
 void Window::draw_board(const Board& board, const glm::ivec2 selected_cell)
 {
+    draw_9x9_grid(3, glm::vec3(1.0, 0.0, 1.0));
     int32_t number;
     for(uint32_t i = 0; i < GRID_SIZE; ++i)
     {
@@ -109,7 +143,7 @@ void Window::draw_board(const Board& board, const glm::ivec2 selected_cell)
             // mark background of empty cells and determine color of cell number
             uint32_t flags = board.get_flags(i, j);
             glm::vec3 color;
-            if (flags & CONTENT_FLAGS_INVALID) draw_quad(pos, CELL_OPENGL_SIZE.y - 0.01, glm::vec3(0.0, 0.0, 0.2));
+            if (flags & CONTENT_FLAGS_INVALID) draw_quad(pos, CELL_OPENGL_SIZE.y - 0.02, glm::vec3(0.0, 0.0, 0.2));
             else if (flags & CONTENT_FLAGS_WRONG) color = glm::vec3(1.0, 0.0, 0.0);
             else if (flags & CONTENT_FLAGS_PRE_SET) color = glm::vec3(1.0, 1.0, 1.0);
             else if (flags & CONTENT_FLAGS_USER_SET) color = glm::vec3(0.0, 1.0, 1.0);
@@ -118,7 +152,6 @@ void Window::draw_board(const Board& board, const glm::ivec2 selected_cell)
 
             // draw grid cell
             if (i == selected_cell.x && j == selected_cell.y) draw_cell_border(pos, CELL_OPENGL_SIZE.y - 0.01, glm::vec3(0.0, 1.0, 1.0));
-            else draw_cell_border(pos, CELL_OPENGL_SIZE.y - 0.01, glm::vec3(1.0, 1.0, 1.0));
 
             if (!(flags & CONTENT_FLAGS_INVALID))
             {

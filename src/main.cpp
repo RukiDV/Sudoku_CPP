@@ -28,7 +28,7 @@ int main (int argc, char** argv)
 {
     Window window(WINDOW_SIZE.x, WINDOW_SIZE.y, "Sudoku Game");
 
-    Board board = build_sudoku_board(10);
+    Board board = build_sudoku_board(15);
     Bot bot(board);
 
     SDL_Event event;
