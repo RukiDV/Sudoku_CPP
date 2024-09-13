@@ -28,7 +28,7 @@ int main (int argc, char** argv)
 {
     Window window(WINDOW_SIZE.x, WINDOW_SIZE.y, "Sudoku Game");
 
-    Board board = build_sudoku_board(15);
+    Board board = build_sudoku_board(30);
     Bot bot(board);
 
     SDL_Event event;
@@ -60,7 +60,10 @@ int main (int argc, char** argv)
                 int x, y;
                 SDL_GetMouseState(&x, &y);
                 switch (event.key.keysym.sym)
-                {
+                {                    
+                    case SDLK_0:
+                        apply_user_input(board, selected_cell, 0, bot);
+                        break;
                     case SDLK_1:
                         apply_user_input(board, selected_cell, 1, bot);
                         break;
