@@ -106,7 +106,7 @@ void draw_dice_number(glm::vec2 pos, uint32_t number, float extent, const glm::v
     switch (number) 
     {
         case 9:
-            glVertex2f(pos.x + extent, pos.y - extent);
+            //glVertex2f(pos.x + extent, pos.y - extent);
         case 8:
             glVertex2f(pos.x, pos.y - extent);
         case 7:
@@ -131,6 +131,195 @@ void draw_dice_number(glm::vec2 pos, uint32_t number, float extent, const glm::v
     glEnd();
 }
 
+void draw_one(glm::vec2 pos, float extent, const glm::vec3& color)
+{
+    glLineWidth(5.0);
+    glBegin(GL_LINES);
+    glColor3f(0.0, 1.0, 0.0);
+   
+    glVertex2f(pos.x, pos.y + extent);
+    glVertex2f(pos.x, pos.y - extent);
+        
+    glEnd();
+}
+
+void draw_two(glm::vec2 pos, float extent, const glm::vec3& color)
+{
+    glLineWidth(5.0);
+    glBegin(GL_LINE_STRIP);
+    glColor3f(0.0, 0.0, 1.0);
+   
+    glVertex2f(pos.x - extent, pos.y + extent);
+    glVertex2f(pos.x + extent, pos.y + extent);
+    glVertex2f(pos.x + extent, pos.y);
+    glVertex2f(pos.x - extent, pos.y);
+    glVertex2f(pos.x - extent, pos.y - extent);
+    glVertex2f(pos.x + extent, pos.y - extent);
+        
+    glEnd();
+}
+
+void draw_three(glm::vec2 pos, float extent, const glm::vec3& color)
+{
+    glLineWidth(5.0);
+    glBegin(GL_LINE_STRIP);
+    glColor3f(0.0, 1.0, 1.0);
+   
+    glVertex2f(pos.x - extent, pos.y + extent);
+    glVertex2f(pos.x + extent, pos.y + extent);
+    glVertex2f(pos.x + extent, pos.y - extent);
+    glVertex2f(pos.x - extent, pos.y - extent);
+        
+    glEnd();
+    
+    glBegin(GL_LINES);
+    glVertex2f(pos.x + extent, pos.y);
+    glVertex2f(pos.x - extent, pos.y);
+        
+    glEnd();
+}
+
+void draw_four(glm::vec2 pos, float extent, const glm::vec3& color)
+{
+    glLineWidth(5.0);
+    glBegin(GL_LINE_STRIP);
+    glColor3f(1.0, 0.0, 1.0);
+   
+    glVertex2f(pos.x - extent, pos.y + extent);
+    glVertex2f(pos.x - extent, pos.y);
+    glVertex2f(pos.x + extent, pos.y);
+        
+    glEnd();
+    
+    glBegin(GL_LINES);
+    glVertex2f(pos.x + extent, pos.y + extent);
+    glVertex2f(pos.x + extent, pos.y - extent);
+        
+    glEnd();
+}
+
+void draw_five(glm::vec2 pos, float extent, const glm::vec3& color)
+{
+    glLineWidth(5.0);
+    glBegin(GL_LINE_STRIP);
+    glColor3f(1.0, 1.0, 0.0);
+   
+    glVertex2f(pos.x + extent, pos.y + extent);
+    glVertex2f(pos.x - extent, pos.y + extent);
+    glVertex2f(pos.x - extent, pos.y);
+    glVertex2f(pos.x + extent, pos.y);
+    glVertex2f(pos.x + extent, pos.y - extent);
+    glVertex2f(pos.x - extent, pos.y - extent);
+        
+    glEnd();
+}
+
+void draw_six(glm::vec2 pos, float extent, const glm::vec3& color)
+{
+    glLineWidth(5.0);
+    glBegin(GL_LINE_STRIP);
+    glColor3f(1.0, 0.5, 0.0);
+   
+    glVertex2f(pos.x + extent, pos.y + extent);
+    glVertex2f(pos.x - extent, pos.y + extent);
+    glVertex2f(pos.x - extent, pos.y);
+    glVertex2f(pos.x + extent, pos.y);
+    glVertex2f(pos.x + extent, pos.y - extent);
+    glVertex2f(pos.x - extent, pos.y - extent);
+    glVertex2f(pos.x - extent, pos.y);
+        
+    glEnd();
+}
+
+void draw_seven(glm::vec2 pos, float extent, const glm::vec3& color)
+{
+    glLineWidth(5.0);
+    glBegin(GL_LINE_STRIP);
+    glColor3f(0.5, 0.0, 0.5);
+   
+    glVertex2f(pos.x - extent, pos.y + extent);
+    glVertex2f(pos.x + extent, pos.y + extent);
+    glVertex2f(pos.x + extent, pos.y - extent);
+        
+    glEnd();
+}
+void draw_eight(glm::vec2 pos, float extent, const glm::vec3& color)
+{
+    glLineWidth(5.0);
+    glBegin(GL_LINE_STRIP);
+    glColor3f(0.0, 0.5, 1.0);
+   
+    glVertex2f(pos.x + extent, pos.y);
+    glVertex2f(pos.x - extent, pos.y);
+    glVertex2f(pos.x - extent, pos.y + extent);
+    glVertex2f(pos.x + extent, pos.y + extent);
+    glVertex2f(pos.x + extent, pos.y - extent);
+    glVertex2f(pos.x - extent, pos.y - extent);
+    glVertex2f(pos.x - extent, pos.y);
+        
+    glEnd();
+}
+
+void draw_nine(glm::vec2 pos, float extent, const glm::vec3& color)
+{
+    glLineWidth(5.0);
+    glBegin(GL_LINE_STRIP);
+    glColor3f(0.5, 0.2, 0.0);
+   
+    glVertex2f(pos.x + extent, pos.y);
+    glVertex2f(pos.x - extent, pos.y);
+    glVertex2f(pos.x - extent, pos.y + extent);
+    glVertex2f(pos.x + extent, pos.y + extent);
+    glVertex2f(pos.x + extent, pos.y - extent);
+    glVertex2f(pos.x - extent, pos.y - extent);
+        
+    glEnd();
+}
+
+void draw_number(glm::vec2 pos, uint32_t number, float extent, const glm::vec3& color)
+{
+    glLineWidth(5.0);
+    glBegin(GL_LINE_STRIP);
+    glColor3f(color.r, color.g, color.b);
+    switch (number)
+    {
+        case 1:
+            draw_one(pos, extent, color);
+            break;
+        case 2:
+            draw_two(pos, extent, color);
+            break;
+        case 3:
+            draw_three(pos, extent, color);
+            break;
+        case 4:
+            draw_four(pos, extent, color);
+            break;
+        case 5:
+            draw_five(pos, extent, color);
+            break;
+        case 6:
+            draw_six(pos, extent, color);
+            break;
+        case 7:
+            draw_seven(pos, extent, color);
+            break;
+        case 8:
+            draw_eight(pos, extent, color);
+            break;
+        case 9:
+            draw_nine(pos, extent, color);
+            break;
+        default:
+            std::cout << "Number does not exist" << std::endl;
+        break;
+    }
+    glEnd();
+
+}
+
+
+
 void Window::draw_board(const Board& board, const glm::ivec2 selected_cell)
 {
     draw_9x9_grid(3, glm::vec3(1.0, 0.0, 1.0));
@@ -143,10 +332,18 @@ void Window::draw_board(const Board& board, const glm::ivec2 selected_cell)
             // mark background of empty cells and determine color of cell number
             uint32_t flags = board.get_flags(i, j);
             glm::vec3 color;
-            if (flags & CONTENT_FLAGS_INVALID) draw_quad(pos, CELL_OPENGL_SIZE.y - 0.02, glm::vec3(0.0, 0.0, 0.2));
-            else if (flags & CONTENT_FLAGS_WRONG) color = glm::vec3(1.0, 0.0, 0.0);
+            if (flags & CONTENT_FLAGS_INVALID) draw_quad(pos, CELL_OPENGL_SIZE.y - 0.02, glm::vec3(0.0, 0.0, 0.25));
+            else if (flags & CONTENT_FLAGS_WRONG) 
+            {
+                color = glm::vec3(1.0, 0.0, 0.0); 
+                draw_quad(pos, CELL_OPENGL_SIZE.y - 0.02, glm::vec3(0.7, 0.0, 0.0));
+            }    
             else if (flags & CONTENT_FLAGS_PRE_SET) color = glm::vec3(1.0, 1.0, 1.0);
-            else if (flags & CONTENT_FLAGS_USER_SET) color = glm::vec3(0.0, 1.0, 1.0);
+            else if (flags & CONTENT_FLAGS_USER_SET) 
+            {
+                color = glm::vec3(0.0, 1.0, 1.0);
+                draw_quad(pos, CELL_OPENGL_SIZE.y - 0.02, glm::vec3(0.0, 0.0, 0.25));
+            }
             else if (flags & CONTENT_FLAGS_BOT_SET) color = glm::vec3(1.0, 0.0, 1.0);
             else ERROR("Failed to determine set flags.");
 
@@ -157,7 +354,8 @@ void Window::draw_board(const Board& board, const glm::ivec2 selected_cell)
             {
                 // draw number in cell
                 number = board.get_value(i,j);
-                draw_dice_number(pos, number, EXTENT, color);
+                //draw_dice_number(pos, number, EXTENT, color);
+                draw_number(pos, number, 0.065, color);
             }
         }
     }
